@@ -1,0 +1,42 @@
+---
+# tasks file for .
+
+- name: Install a list of packages
+  become: true
+  apt:
+    update_cache: yes
+    pkg:
+      - git
+
+- name: Dowmload source code 
+  become: true
+  git:
+   repo: https://github.com/openstack-dev/devstack.git
+   dest: /opt/devstack
+
+- name: Change script to executable mode
+  become: true
+  file: 
+   path: /opt/devstack/tools/create-stack-user.sh
+   mode: u+x,g+x,o+x
+
+#- name: Create local.conf 
+#  become: true
+#  template:
+#    src: local.conf.j2
+#    dest: /opt/devstack/local.conf
+
+- name: Create users and group for stack 
+  become: true
+  environment: 
+    HOST_IP: "{{ansible_default_ipv4.address}}"
+  shell: /opt/devstack/tools/create-stack-user.sh
+
+- name: Change user and group path
+  become: true
+  file:
+    path: /opt/devstack
+    recurse: yes
+    owner: stack
+    group: stack
+
