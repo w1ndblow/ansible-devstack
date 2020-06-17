@@ -57,6 +57,8 @@ LOGDAYS=2
 # ``LOG_COLOR`` false.
 #LOG_COLOR=False
 
+LOG_COLOR=False
+SCREEN_LOGDIR=/opt/stack/logs
 
 # Using milestone-proposed branches
 # ---------------------------------
@@ -98,3 +100,18 @@ SWIFT_REPLICAS=1
 # moved by setting ``SWIFT_DATA_DIR``. The directory will be created
 # if it does not exist.
 SWIFT_DATA_DIR=$DEST/data
+
+#Enable/Disable Services
+disable_service n-net
+enable_service q-svc
+enable_service q-agt
+enable_service q-dhcp
+enable_service q-l3
+enable_service q-meta
+enable_service neutron
+enable_service tempest
+
+#CINDER CONFIG
+VOLUME_BACKING_FILE_SIZE=102400M
+#GENERAL CONFIG
+API_RATE_LIMIT=False

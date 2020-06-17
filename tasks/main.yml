@@ -20,12 +20,6 @@
    path: /opt/devstack/tools/create-stack-user.sh
    mode: u+x,g+x,o+x
 
-#- name: Create local.conf 
-#  become: true
-#  template:
-#    src: local.conf.j2
-#    dest: /opt/devstack/local.conf
-
 - name: Create users and group for stack 
   become: true
   environment: 
@@ -40,3 +34,27 @@
     owner: stack
     group: stack
 
+- name: Create local.conf 
+  become: true
+  become_user: stack
+  template:
+    src: local.conf.j2
+    dest: /opt/devstack/local.conf
+
+- name: Change user and group path
+  become: true
+  file:
+    path: "{{item}}"
+    recurse: yes
+    owner: stack
+    group: stack
+  with_items:
+     - /opt/stack/
+     - /opt/stack/logs/
+
+- name: Execute stacking 
+  become: true
+  become_user: stack
+  environment:
+    FORCE: "yes"
+  shell: /opt/devstack/stack.sh
