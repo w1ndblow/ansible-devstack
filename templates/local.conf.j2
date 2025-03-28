@@ -29,6 +29,7 @@ ADMIN_PASSWORD=nomoresecret
 DATABASE_PASSWORD=stackdb
 RABBIT_PASSWORD=stackqueue
 SERVICE_PASSWORD=$ADMIN_PASSWORD
+SERVICE_TIMEOUT=160
 
 # ``HOST_IP`` and ``HOST_IPV6`` should be set manually for best results if
 # the NIC configuration of the host is unusual, i.e. ``eth1`` has the default
@@ -104,9 +105,9 @@ SWIFT_DATA_DIR=$DEST/data
 #Enable/Disable Services
 disable_service n-net
 enable_service q-svc
-enable_service q-agt
+disable_service q-agt
 enable_service q-dhcp
-enable_service q-l3
+disable_service q-l3
 enable_service q-meta
 enable_service neutron
 enable_service tempest

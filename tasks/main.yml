@@ -8,7 +8,14 @@
     pkg:
       - git
 
-- name: Dowmload source code 
+- name: Config git
+  become: true
+  git_config:
+    name: safe.directory
+    scope: global
+    value: /opt/devstack
+
+- name: Dowmload source code
   become: true
   git:
    repo: https://github.com/openstack-dev/devstack.git
@@ -16,13 +23,13 @@
 
 - name: Change script to executable mode
   become: true
-  file: 
+  file:
    path: /opt/devstack/tools/create-stack-user.sh
    mode: u+x,g+x,o+x
 
-- name: Create users and group for stack 
+- name: Create users and group for stack
   become: true
-  environment: 
+  environment:
     HOST_IP: "{{ansible_default_ipv4.address}}"
   shell: /opt/devstack/tools/create-stack-user.sh
 
@@ -34,12 +41,13 @@
     owner: stack
     group: stack
 
-- name: Create local.conf 
+- name: Create local.conf
   become: true
-  become_user: stack
   template:
     src: local.conf.j2
     dest: /opt/devstack/local.conf
+    owner: stack
+    group: stack
 
 - name: Change user and group path
   become: true
@@ -52,9 +60,8 @@
      - /opt/stack/
      - /opt/stack/logs/
 
-- name: Execute stacking 
+- name: Execute stacking
   become: true
-  become_user: stack
   environment:
     FORCE: "yes"
-  shell: /opt/devstack/stack.sh
+  shell: su - stack -c /opt/devstack/stack.sh

@@ -1,1 +1,4 @@
 .vagrant
+seed.img
+.note.md
+user-data.yaml
